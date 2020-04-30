@@ -6,6 +6,8 @@ import java.util.Map;
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.deepdream.dmall.member.feign.CouponFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,7 @@ import com.deepdream.common.utils.R;
  * @email wangkai744567028@gmail.com
  * @date 2020-04-21 11:23:48
  */
+@RefreshScope
 @RestController
 @RequestMapping("member/member")
 public class MemberController {
@@ -34,6 +37,16 @@ public class MemberController {
 
     @Autowired
     private CouponFeignService couponFeignService;
+
+    @Value("${user.name}")
+    private String name;
+    @Value("${user.age}")
+    private String age;
+
+    @RequestMapping("/testconfig")
+    public R testConfig(){
+        return R.ok().put("name",name).put("age",age);
+    }
     @RequestMapping("/test")
     public R test(){
         return couponFeignService.test();

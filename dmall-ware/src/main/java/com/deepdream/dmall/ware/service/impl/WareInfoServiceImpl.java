@@ -11,6 +11,7 @@ import com.deepdream.common.utils.Query;
 import com.deepdream.dmall.ware.dao.WareInfoDao;
 import com.deepdream.dmall.ware.entity.WareInfoEntity;
 import com.deepdream.dmall.ware.service.WareInfoService;
+import org.springframework.util.StringUtils;
 
 
 @Service("wareInfoService")
@@ -18,9 +19,18 @@ public class WareInfoServiceImpl extends ServiceImpl<WareInfoDao, WareInfoEntity
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        QueryWrapper<WareInfoEntity> queryWrapper = new QueryWrapper<>();
+
+        String key = (String) params.get("key");
+        if(!StringUtils.isEmpty(key)){
+            queryWrapper.eq("id",key)
+                    .or().likeRight("name",key)
+                    .or().likeRight("address",key)
+                    .or().likeRight("areacode",key);
+        }
         IPage<WareInfoEntity> page = this.page(
                 new Query<WareInfoEntity>().getPage(params),
-                new QueryWrapper<WareInfoEntity>()
+                queryWrapper
         );
 
         return new PageUtils(page);

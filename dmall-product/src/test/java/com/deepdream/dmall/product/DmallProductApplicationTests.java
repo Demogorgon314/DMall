@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 
 @SpringBootTest
@@ -15,6 +19,8 @@ import java.util.List;
 class DmallProductApplicationTests {
     @Autowired
     BrandService brandService;
+
+
     @Test
     void contextLoads() {
 //        BrandEntity brandEntity = new BrandEntity();
@@ -25,7 +31,7 @@ class DmallProductApplicationTests {
 //        log.info("保存成功");
 //        brandService.updateById(brandEntity);
         List<BrandEntity> list = brandService.list(new QueryWrapper<BrandEntity>().eq("brand_id", 1L));
-        list.forEach((item)->{
+        list.forEach((item) -> {
             log.info(item.toString());
         });
     }

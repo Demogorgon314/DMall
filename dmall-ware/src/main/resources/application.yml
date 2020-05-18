@@ -12,8 +12,14 @@ spring:
         server-addr: localhost:8848
   application:
     name: dmall-ware
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+logging:
+  level:
+    com.deepdream: debug
+

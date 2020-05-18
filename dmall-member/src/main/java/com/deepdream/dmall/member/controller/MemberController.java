@@ -35,22 +35,6 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @Autowired
-    private CouponFeignService couponFeignService;
-
-    @Value("${user.name}")
-    private String name;
-    @Value("${user.age}")
-    private String age;
-
-    @RequestMapping("/testconfig")
-    public R testConfig(){
-        return R.ok().put("name",name).put("age",age);
-    }
-    @RequestMapping("/test")
-    public R test(){
-        return couponFeignService.test();
-    }
     /**
      * 列表
      */

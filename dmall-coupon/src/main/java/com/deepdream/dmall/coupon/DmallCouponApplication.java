@@ -7,6 +7,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @MapperScan("com.deepdream.dmall.coupon.dao")
+//@EnableFeignClients(basePackages = )
 @EnableDiscoveryClient
 @EnableFeignClients
 @SpringBootApplication

@@ -7,14 +7,23 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
-  application:
-    name: dmall-product
+        server-addr: 127.0.0.1:8848
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
 
+# 全局的逻辑删除规则为 已删除 1 ，未删除 0
+# 需要在相关表上加上 @TableLogic
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
   global-config:
     db-config:
       id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 server:
   port: 10000
+logging:
+  level:
+    com.deepdream.dmall: debug
+
+

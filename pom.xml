@@ -22,6 +22,7 @@
         <module>dmall-order</module>
         <module>dmall-product</module>
         <module>dmall-ware</module>
+        <module>dmall-gateway</module>
         <module>renren-fast</module>
         <module>renren-generator</module>
         <module>dmall-common</module>

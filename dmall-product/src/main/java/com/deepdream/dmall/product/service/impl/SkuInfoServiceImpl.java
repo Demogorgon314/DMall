@@ -1,8 +1,11 @@
 package com.deepdream.dmall.product.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -36,31 +39,31 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
 
     @Override
     public PageUtils queryPageByCondition(Map<String, Object> params) {
-        QueryWrapper<SkuInfoEntity> queryWrapper = new QueryWrapper<>();
+        LambdaQueryWrapper<SkuInfoEntity> queryWrapper = Wrappers.lambdaQuery();
         params.get("key");
         String key = (String) params.get("key");
         if(!StringUtils.isEmpty(key)){
             queryWrapper.and((w)->{
-                w.eq("sku_id",key).or().likeRight("sku_name",key);
+                w.eq(SkuInfoEntity::getSkuId,key).or().likeRight(SkuInfoEntity::getSkuName,key);
             });
         }
         String catelogId = (String) params.get("catelogId");
         if(!StringUtils.isEmpty(catelogId) && !"0".equals(catelogId)){
-            queryWrapper.eq("catalog_id",catelogId);
+            queryWrapper.eq(SkuInfoEntity::getCatalogId,catelogId);
         }
         String brandId = (String) params.get("brandId");
         if(!StringUtils.isEmpty(brandId) && !"0".equals(brandId)){
-            queryWrapper.eq("brand_id",brandId);
+            queryWrapper.eq(SkuInfoEntity::getBrandId,brandId);
         }
         String min = (String) params.get("min");
         if(!StringUtils.isEmpty(min)){
-            queryWrapper.ge("price",min);
+            queryWrapper.ge(SkuInfoEntity::getPrice,min);
         }
         String max = (String) params.get("max");
         if(!StringUtils.isEmpty(max)){
             BigDecimal bigDecimal = new BigDecimal(max);
             if(bigDecimal.compareTo(new BigDecimal(0)) > 0){
-                queryWrapper.le("price",max);
+                queryWrapper.le(SkuInfoEntity::getPrice,max);
             }
 
         }
@@ -70,6 +73,13 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoDao, SkuInfoEntity> i
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<SkuInfoEntity> getSkuBySpuId(Long spuId) {
+        return this.list(Wrappers
+                .<SkuInfoEntity>lambdaQuery()
+                .eq(SkuInfoEntity::getSkuId,spuId));
     }
 
 }

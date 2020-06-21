@@ -2,6 +2,7 @@ package com.deepdream.dmall.product.service.impl;
 
 import com.deepdream.common.to.SkuReductionTo;
 import com.deepdream.common.to.SpuBoundTo;
+import com.deepdream.common.to.es.SkuEsModel;
 import com.deepdream.common.utils.R;
 import com.deepdream.dmall.product.entity.*;
 import com.deepdream.dmall.product.feign.CouponFeignService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +57,12 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Autowired
     private CouponFeignService couponFeignService;
+
+    @Autowired
+    private BrandService brandService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -215,6 +223,34 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public void up(Long spuId) {
+        List<SkuEsModel> upProducts = new ArrayList<>();
+        // 1.组装需要的数据
+        SkuEsModel esModel = new SkuEsModel();
+        List<SkuInfoEntity> skus = skuInfoService.getSkuBySpuId(spuId);
+        // 2.封装需要的数据
+        List<SkuEsModel> collect = skus.stream().map(sku -> {
+            SkuEsModel skuEsModel = new SkuEsModel();
+            BeanUtils.copyProperties(sku,skuEsModel);
+            skuEsModel.setSkuPrice(sku.getPrice());
+            skuEsModel.setSkuImg(sku.getSkuDefaultImg());
+            // TODO 1. 发送远程调用，查询是否有库存 hasStock
+
+            // TODO 2. 热度评分 hotScore 默认 0
+            // TODO 3. 查询 brandName，brandImg
+            BrandEntity byId = brandService.getById(sku.getBrandId());
+
+            skuEsModel.setBrandName(byId.getName());
+            //
+            // catelogName
+            // Attrs
+
+
+            return skuEsModel;
+        }).collect(Collectors.toList());
     }
 
 

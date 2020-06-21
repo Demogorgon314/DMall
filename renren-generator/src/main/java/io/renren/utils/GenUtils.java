@@ -125,8 +125,8 @@ public class GenUtils {
             //渲染模板
             StringWriter sw = new StringWriter();
             Template tpl = Velocity.getTemplate(template, "UTF-8" );
-            tpl.merge(context, sw);
 
+            tpl.merge(context, sw);
             try {
                 //添加到zip
                 zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config.getString("package" ), config.getString("moduleName" ))));
